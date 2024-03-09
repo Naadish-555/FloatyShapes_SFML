@@ -115,7 +115,7 @@ int main()
 	}
 
 //	std::vector<std::shared_ptr<sf::Shape>> shapes;
-	sf::RenderWindow window(sf::VideoMode(720, 480), "Assignment 01");
+	sf::RenderWindow window(sf::VideoMode(windowH, windowW), "Assignment 01");
 	window.setFramerateLimit(60);
 	std::string lstr = "Rect1";
 	sf::RectangleShape rect1(sf::Vector2f(200, 200));
