@@ -78,116 +78,125 @@ int main()
 	int r,g,b;
 	float sizeW, sizeH, sizeR;
 	sf::Font myFont;
-	while (fin >> input)
+	if (fin.is_open()) 
 	{
-		if (input == "Rectangle" || input == "rectangle")
+		while (fin >> input)
 		{
-			fin >> sText >> posX >> posY >> speedX >> speedY >> r >> g >> b >> sizeW >> sizeH;
-			Shapez rect(input,sText, posX, posY, speedX, speedY, r, g, b, sizeW, sizeH);
-			shapeVec.emplace_back(rect);
-		}
-		else if (input == "Circle" || input == "circle")
-		{
-			fin >> sText >> posX >> posY >> speedX >> speedY >> r >> g >> b >> sizeR;
-			Shapez circle(input,sText, posX, posY, speedX, speedY, r, g, b, sizeR);
-			shapeVec.emplace_back(circle);
-		}
-		else if (input == "Window" || input == "window")
-		{
-			fin >> windowH >> windowW;
-
-		}
-		else if (input == "font" || input == "Font")
-		{
-			fin >> fFile >> fSize >> fR >> fG >> fB;
-			if (!myFont.loadFromFile(fFile))
+			if (input == "Rectangle" || input == "rectangle")
 			{
-				//some error handling
-				std::cout << "failed to load tech font from file";
-				exit(-1);
+				fin >> sText >> posX >> posY >> speedX >> speedY >> r >> g >> b >> sizeW >> sizeH;
+				Shapez rect(input,sText, posX, posY, speedX, speedY, r, g, b, sizeW, sizeH);
+				shapeVec.emplace_back(rect);
+			}
+			else if (input == "Circle" || input == "circle")
+			{
+				fin >> sText >> posX >> posY >> speedX >> speedY >> r >> g >> b >> sizeR;
+				Shapez circle(input,sText, posX, posY, speedX, speedY, r, g, b, sizeR);
+				shapeVec.emplace_back(circle);
+			}
+			else if (input == "Window" || input == "window")
+			{
+				fin >> windowH >> windowW;
+
+			}
+			else if (input == "font" || input == "Font")
+			{
+				fin >> fFile >> fSize >> fR >> fG >> fB;
+				if (!myFont.loadFromFile(fFile))
+				{
+					//some error handling
+					std::cout << "failed to load tech font from file";
+					exit(-1);
+				}
+			}
+
+			else
+			{
+				std::cout << "invalid input :" << input << std::endl;
 			}
 		}
 
-		else
-		{
-			std::cout << "invalid input :" << input << std::endl;
-		}
-	}
-
-//	std::vector<std::shared_ptr<sf::Shape>> shapes;
-	sf::RenderWindow window(sf::VideoMode(windowH, windowW), "Assignment 01");
-	window.setFramerateLimit(60);
-	std::string lstr = "Rect1";
-	sf::RectangleShape rect1(sf::Vector2f(200, 200));
-	rect1.setPosition(200, 200);
-	rect1.setSize(sf::Vector2f(100, 100));
-	rect1.setFillColor(sf::Color::Red);
+	//	std::vector<std::shared_ptr<sf::Shape>> shapes;
+		sf::RenderWindow window(sf::VideoMode(windowH, windowW), "Assignment 01");
+		window.setFramerateLimit(60);
+		std::string lstr = "Rect1";
+		sf::RectangleShape rect1(sf::Vector2f(200, 200));
+		rect1.setPosition(200, 200);
+		rect1.setSize(sf::Vector2f(100, 100));
+		rect1.setFillColor(sf::Color::Red);
 	
-	std::cout << "A :  " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().left << std::endl;
-	std::cout << "B : " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
-	std::cout << "C : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
-	std::cout << "D : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().left << std::endl;
+		std::cout << "A :  " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().left << std::endl;
+		std::cout << "B : " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
+		std::cout << "C : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
+		std::cout << "D : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().left << std::endl;
 
 
-	/*for (auto& shape : shapeVec)
-	{
-		std::cout << shape.m_name << std::endl;
-		if (shape.m_name == "rectangle" || shape.m_name == "Rectangle")
+		/*for (auto& shape : shapeVec)
 		{
-			std::shared_ptr<sf::Shape> rectangle = std::make_shared<sf::RectangleShape>(sf::Vector2f(shape.m_sizeH, shape.m_sizeW));
-			rectangle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
-			rectangle->setPosition(shape.m_posX, shape.m_posY);
-			shapes.emplace_back(rectangle);
-		}
-		else if (shape.m_name == "circle" || shape.m_name == "Circle")
-		{
-			std::shared_ptr<sf::Shape> circle = std::make_shared<sf::CircleShape>(shape.m_sizeR);
-			circle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
-			circle->setPosition(shape.m_posX, shape.m_posY);
-			shapes.emplace_back(circle);
-		}
-	}*/
-	/*sf::RectangleShape rect1(sf::Vector2f(Rect1.m_sizeH, Rect1.m_sizeW));
-	rect1.setFillColor(sf::Color(Rect1.R, Rect1.G, Rect1.B));
-	rect1.setPosition(Rect1.m_posX, Rect1.m_posY);*/
+			std::cout << shape.m_name << std::endl;
+			if (shape.m_name == "rectangle" || shape.m_name == "Rectangle")
+			{
+				std::shared_ptr<sf::Shape> rectangle = std::make_shared<sf::RectangleShape>(sf::Vector2f(shape.m_sizeH, shape.m_sizeW));
+				rectangle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
+				rectangle->setPosition(shape.m_posX, shape.m_posY);
+				shapes.emplace_back(rectangle);
+			}
+			else if (shape.m_name == "circle" || shape.m_name == "Circle")
+			{
+				std::shared_ptr<sf::Shape> circle = std::make_shared<sf::CircleShape>(shape.m_sizeR);
+				circle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
+				circle->setPosition(shape.m_posX, shape.m_posY);
+				shapes.emplace_back(circle);
+			}
+		}*/
+		/*sf::RectangleShape rect1(sf::Vector2f(Rect1.m_sizeH, Rect1.m_sizeW));
+		rect1.setFillColor(sf::Color(Rect1.R, Rect1.G, Rect1.B));
+		rect1.setPosition(Rect1.m_posX, Rect1.m_posY);*/
 
 		
 	
-	while (window.isOpen())
-	{
-		sf::Event event;
-		if (window.pollEvent(event))
+		while (window.isOpen())
 		{
-			if (event.type == sf::Event::Closed)
+			sf::Event event;
+			if (window.pollEvent(event))
 			{
-				std::cout << "Window closed";
-				window.close();
-			}
+				if (event.type == sf::Event::Closed)
+				{
+					std::cout << "Window closed";
+					window.close();
+				}
 		
-			if (event.type == sf::Event::KeyPressed)
-			{
-				std::cout << "Key pressed code = " << event.key.code<<std::endl;
+				if (event.type == sf::Event::KeyPressed)
+				{
+					std::cout << "Key pressed code = " << event.key.code<<std::endl;
+				}
 			}
-		}
 
-		window.clear();
-		rect1.setPosition(rect1.getPosition().x - 0.1f, rect1.getPosition().y - 0.2f);
+			window.clear();
+			rect1.setPosition(rect1.getPosition().x - 0.1f, rect1.getPosition().y - 0.2f);
 		
-		window.draw(rect1);
-		for (auto& s : shapeVec)
-		{
-			s.shape->setPosition(s.shape->getPosition().x - s.m_speedX, s.shape->getPosition().y - s.m_speedY);
-			s.m_label = sf::Text(s.m_text, myFont, fSize);
-			s.m_label.setFillColor(sf::Color(fR, fG, fB));
-			s.m_label.setPosition(s.shape->getPosition());
-			window.draw(*s.shape);
-			window.draw(s.m_label);
+			window.draw(rect1);
+			for (auto& s : shapeVec)
+			{
+				s.shape->setPosition(s.shape->getPosition().x - s.m_speedX, s.shape->getPosition().y - s.m_speedY);
+				s.m_label = sf::Text(s.m_text, myFont, fSize);
+				s.m_label.setFillColor(sf::Color(fR, fG, fB));
+				s.m_label.setPosition(s.shape->getPosition());
+				window.draw(*s.shape);
+				window.draw(s.m_label);
+			}
+			//window.draw(rect2);
+			window.display();
+			//rect1.setPosition(rect1.getPosition().x - Rect1.m_speedX, rect1.getPosition().y - Rect1.m_speedY);
+		
 		}
-		//window.draw(rect2);
-		window.display();
-		//rect1.setPosition(rect1.getPosition().x - Rect1.m_speedX, rect1.getPosition().y - Rect1.m_speedY);
-		
+		return 0;
+
 	}
-
-	return 0;
+	else
+	{
+		std::cout << "File not opened";
+		std::cin.get();
+		return -1;
+	}
 }
