@@ -2,6 +2,7 @@
 #include<SFMl\Graphics.hpp>
 #include<iostream>
 #include<fstream>
+#include<cmath>
 
 class Shapez
 {
@@ -27,6 +28,7 @@ public:
 
 	Shapez(const std::string &name,const std::string &text, float posX, float posY, float speedX, float speedY, int r, int g, int b, float sizeW, float sizeH)
 		: m_name(name)
+		, m_text(text)
 		, m_posX(posX)
 		, m_posY(posY)
 		, m_speedX(speedX)
@@ -43,11 +45,13 @@ public:
 		m_top = shape->getGlobalBounds().width * 0.5f;
 		m_left = shape->getGlobalBounds().height * 0.5f;
 		
+		
 	}
 
 
 	Shapez(const std::string& name, const std::string& text, float posX, float posY, float speedX, float speedY, int r, int g, int b, float sizeR)
 		: m_name(name)
+		, m_text(text)
 		, m_posX(posX)
 		, m_posY(posY)
 		, m_speedX(speedX)
@@ -60,6 +64,7 @@ public:
 		shape = std::make_shared<sf::CircleShape>(m_sizeR);
 		shape->setFillColor(sf::Color(R, G, B));
 		shape->setPosition(m_posX, m_posY);
+		
 	}
 	
 };
@@ -69,13 +74,12 @@ void CheckCollision(Shapez &s, unsigned int wW , unsigned int wH)
 	if (s.shape->getGlobalBounds().top <= 0 || s.shape->getGlobalBounds().top + s.shape->getGlobalBounds().height >= wW)
 	{
 		s.m_speedY = -(s.m_speedY);
-		std::cout << s.m_name << ":" << s.m_speedX << "," << s.m_speedY;
-		//std::cout << "Collisions done on screen window width";
+		//std::cout << s.m_name << ":" << s.m_speedX << "," << s.m_speedY;
 	}
 	if (s.shape->getGlobalBounds().left <= 0 || s.shape->getGlobalBounds().left + s.shape->getGlobalBounds().width >= wH)
 	{
 		s.m_speedX = -(s.m_speedX);
-		std::cout << s.m_name<<":" << s.m_speedX << "," << s.m_speedY;
+		//std::cout << s.m_name<<":" << s.m_speedX << "," << s.m_speedY;
 	}
 }
 
@@ -134,7 +138,7 @@ int main()
 		sf::RenderWindow window(sf::VideoMode(windowW, windowH), "Assignment 01");
 		window.setFramerateLimit(60);
 		std::string lstr = "Rect1";
-		sf::RectangleShape rect1(sf::Vector2f(200, 200));
+		/*sf::RectangleShape rect1(sf::Vector2f(200, 200));
 		rect1.setPosition(200, 200);
 		rect1.setSize(sf::Vector2f(100, 100));
 		rect1.setFillColor(sf::Color::Red);
@@ -142,32 +146,8 @@ int main()
 		std::cout << "A :  " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().left << std::endl;
 		std::cout << "B : " << rect1.getGlobalBounds().top << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
 		std::cout << "C : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().height + rect1.getGlobalBounds().left << std::endl;
-		std::cout << "D : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().left << std::endl;
+		std::cout << "D : " << rect1.getGlobalBounds().top + rect1.getGlobalBounds().width << "," << rect1.getGlobalBounds().left << std::endl;*/
 
-
-		/*for (auto& shape : shapeVec)
-		{
-			std::cout << shape.m_name << std::endl;
-			if (shape.m_name == "rectangle" || shape.m_name == "Rectangle")
-			{
-				std::shared_ptr<sf::Shape> rectangle = std::make_shared<sf::RectangleShape>(sf::Vector2f(shape.m_sizeH, shape.m_sizeW));
-				rectangle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
-				rectangle->setPosition(shape.m_posX, shape.m_posY);
-				shapes.emplace_back(rectangle);
-			}
-			else if (shape.m_name == "circle" || shape.m_name == "Circle")
-			{
-				std::shared_ptr<sf::Shape> circle = std::make_shared<sf::CircleShape>(shape.m_sizeR);
-				circle->setFillColor(sf::Color(shape.R, shape.G, shape.B));
-				circle->setPosition(shape.m_posX, shape.m_posY);
-				shapes.emplace_back(circle);
-			}
-		}*/
-		/*sf::RectangleShape rect1(sf::Vector2f(Rect1.m_sizeH, Rect1.m_sizeW));
-		rect1.setFillColor(sf::Color(Rect1.R, Rect1.G, Rect1.B));
-		rect1.setPosition(Rect1.m_posX, Rect1.m_posY);*/
-
-		
 	
 		while (window.isOpen())
 		{
@@ -187,22 +167,28 @@ int main()
 			}
 
 			window.clear();
-			rect1.setPosition(rect1.getPosition().x - 0.1f, rect1.getPosition().y - 0.2f);
+			//rect1.setPosition(rect1.getPosition().x - 0.1f, rect1.getPosition().y - 0.2f);
+			//window.draw(rect1);
 		
-			window.draw(rect1);
 			for (auto& s : shapeVec)
 			{
 				CheckCollision(s,windowH, windowW);
 				s.shape->setPosition(s.shape->getPosition().x - s.m_speedX, s.shape->getPosition().y - s.m_speedY);
 				s.m_label = sf::Text(s.m_text, myFont, fSize);
 				s.m_label.setFillColor(sf::Color(fR, fG, fB));
+
+				//for centralized text
+				auto center = s.m_label.getGlobalBounds().getSize() / 2.f;
+				auto localBounds = center + s.m_label.getLocalBounds().getPosition();
+				s.m_label.setOrigin(localBounds);
+				s.shape->setOrigin(s.shape->getGlobalBounds().getSize() / 2.f);
 				s.m_label.setPosition(s.shape->getPosition());
+				
+
 				window.draw(*s.shape);
 				window.draw(s.m_label);
 			}
-			//window.draw(rect2);
 			window.display();
-			//rect1.setPosition(rect1.getPosition().x - Rect1.m_speedX, rect1.getPosition().y - Rect1.m_speedY);
 		
 		}
 		return 0;
