@@ -64,6 +64,20 @@ public:
 	
 };
 
+void CheckCollision(Shapez &s, unsigned int wW , unsigned int wH)
+{
+	if (s.shape->getGlobalBounds().top <= 0 || s.shape->getGlobalBounds().top + s.shape->getGlobalBounds().height >= wW)
+	{
+		s.m_speedY = -(s.m_speedY);
+		std::cout << s.m_name << ":" << s.m_speedX << "," << s.m_speedY;
+		//std::cout << "Collisions done on screen window width";
+	}
+	if (s.shape->getGlobalBounds().left <= 0 || s.shape->getGlobalBounds().left + s.shape->getGlobalBounds().width >= wH)
+	{
+		s.m_speedX = -(s.m_speedX);
+		std::cout << s.m_name<<":" << s.m_speedX << "," << s.m_speedY;
+	}
+}
 
 int main()
 {
@@ -117,7 +131,7 @@ int main()
 		}
 
 	//	std::vector<std::shared_ptr<sf::Shape>> shapes;
-		sf::RenderWindow window(sf::VideoMode(windowH, windowW), "Assignment 01");
+		sf::RenderWindow window(sf::VideoMode(windowW, windowH), "Assignment 01");
 		window.setFramerateLimit(60);
 		std::string lstr = "Rect1";
 		sf::RectangleShape rect1(sf::Vector2f(200, 200));
@@ -178,6 +192,7 @@ int main()
 			window.draw(rect1);
 			for (auto& s : shapeVec)
 			{
+				CheckCollision(s,windowH, windowW);
 				s.shape->setPosition(s.shape->getPosition().x - s.m_speedX, s.shape->getPosition().y - s.m_speedY);
 				s.m_label = sf::Text(s.m_text, myFont, fSize);
 				s.m_label.setFillColor(sf::Color(fR, fG, fB));
